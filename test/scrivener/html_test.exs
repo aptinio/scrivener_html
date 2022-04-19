@@ -318,11 +318,10 @@ defmodule Scrivener.HTMLTest do
 
   describe "Phoenix conn()" do
     test "handles no entries" do
-      use Phoenix.ConnTest
       Application.put_env(:scrivener_html, :view_style, :bootstrap)
       Application.put_env(:scrivener_html, :routes_helper, MyApp.Router.Helpers)
 
-      assert build_conn()
+      assert Phoenix.ConnTest.build_conn()
              |> HTML.pagination_links(%Page{
                entries: [],
                page_number: 1,
@@ -335,12 +334,11 @@ defmodule Scrivener.HTMLTest do
     end
 
     test "allows other url parameters" do
-      use Phoenix.ConnTest
       Application.put_env(:scrivener_html, :view_style, :bootstrap)
       Application.put_env(:scrivener_html, :routes_helper, MyApp.Router.Helpers)
 
       assert HTML.pagination_links(
-               build_conn(),
+               Phoenix.ConnTest.build_conn(),
                %Page{
                  entries: [%{__struct__: Post, some: :object}],
                  page_number: 1,
@@ -356,10 +354,8 @@ defmodule Scrivener.HTMLTest do
   end
 
   describe "View Styles" do
-    use Phoenix.ConnTest
-
     test "renders Semantic UI styling" do
-      assert build_conn()
+      assert Phoenix.ConnTest.build_conn()
              |> HTML.pagination_links(
                %Page{
                  entries: [],
@@ -375,7 +371,7 @@ defmodule Scrivener.HTMLTest do
     end
 
     test "renders Foundation for Sites 6.x styling" do
-      assert build_conn()
+      assert Phoenix.ConnTest.build_conn()
              |> HTML.pagination_links(
                %Page{
                  entries: [],
@@ -391,7 +387,7 @@ defmodule Scrivener.HTMLTest do
     end
 
     test "renders Foundation for Sites 6.x styling with ellipsis" do
-      assert build_conn()
+      assert Phoenix.ConnTest.build_conn()
              |> HTML.pagination_links(
                %Page{
                  entries: [],
@@ -408,7 +404,7 @@ defmodule Scrivener.HTMLTest do
     end
 
     test "renders bootstrap v4 styling" do
-      assert build_conn()
+      assert Phoenix.ConnTest.build_conn()
              |> HTML.pagination_links(
                %Page{
                  entries: [],
@@ -424,7 +420,7 @@ defmodule Scrivener.HTMLTest do
     end
 
     test "renders materialize css styling" do
-      assert build_conn()
+      assert Phoenix.ConnTest.build_conn()
              |> HTML.pagination_links(
                %Page{
                  entries: [],
@@ -440,7 +436,7 @@ defmodule Scrivener.HTMLTest do
     end
 
     test "renders bulma css styling" do
-      assert build_conn()
+      assert Phoenix.ConnTest.build_conn()
              |> HTML.pagination_links(
                %Page{
                  entries: [],
