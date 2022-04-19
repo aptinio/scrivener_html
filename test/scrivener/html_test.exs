@@ -322,47 +322,16 @@ defmodule Scrivener.HTMLTest do
       Application.put_env(:scrivener_html, :view_style, :bootstrap)
       Application.put_env(:scrivener_html, :routes_helper, MyApp.Router.Helpers)
 
-      assert {:safe,
-              [
-                60,
-                "nav",
-                [],
-                62,
-                [
-                  60,
-                  "ul",
-                  [[32, "class", 61, 34, "pagination", 34]],
-                  62,
-                  [
-                    [
-                      60,
-                      "li",
-                      [[32, "class", 61, 34, "active", 34]],
-                      62,
-                      [60, "a", [[32, "class", 61, 34, "", 34]], 62, "1", 60, 47, "a", 62],
-                      60,
-                      47,
-                      "li",
-                      62
-                    ]
-                  ],
-                  60,
-                  47,
-                  "ul",
-                  62
-                ],
-                60,
-                47,
-                "nav",
-                62
-              ]} =
-               HTML.pagination_links(build_conn(), %Page{
-                 entries: [],
-                 page_number: 1,
-                 page_size: 10,
-                 total_entries: 0,
-                 total_pages: 0
-               })
+      assert build_conn()
+             |> HTML.pagination_links(%Page{
+               entries: [],
+               page_number: 1,
+               page_size: 10,
+               total_entries: 0,
+               total_pages: 0
+             })
+             |> Phoenix.HTML.safe_to_string() ==
+               "<nav><ul class=\"pagination\"><li class=\"active\"><a class=\"\">1</a></li></ul></nav>"
     end
 
     test "allows other url parameters" do
@@ -390,497 +359,100 @@ defmodule Scrivener.HTMLTest do
     use Phoenix.ConnTest
 
     test "renders Semantic UI styling" do
-      assert {:safe,
-              [
-                60,
-                "div",
-                [[32, "class", 61, 34, "ui pagination menu", 34]],
-                62,
-                [[60, "a", [[32, "class", 61, 34, "active item", 34]], 62, "1", 60, 47, "a", 62]],
-                60,
-                47,
-                "div",
-                62
-              ]} =
-               HTML.pagination_links(
-                 build_conn(),
-                 %Page{
-                   entries: [],
-                   page_number: 1,
-                   page_size: 10,
-                   total_entries: 0,
-                   total_pages: 0
-                 },
-                 view_style: :semantic
-               )
+      assert build_conn()
+             |> HTML.pagination_links(
+               %Page{
+                 entries: [],
+                 page_number: 1,
+                 page_size: 10,
+                 total_entries: 0,
+                 total_pages: 0
+               },
+               view_style: :semantic
+             )
+             |> Phoenix.HTML.safe_to_string() ==
+               "<div class=\"ui pagination menu\"><a class=\"active item\">1</a></div>"
     end
 
     test "renders Foundation for Sites 6.x styling" do
-      assert {:safe,
-              [
-                60,
-                "ul",
-                [[32, "class", 61, 34, "pagination", 34], [32, "role", 61, 34, "pagination", 34]],
-                62,
-                [
-                  [
-                    60,
-                    "li",
-                    [[32, "class", 61, 34, "current", 34]],
-                    62,
-                    [60, "span", [[32, "class", 61, 34, "", 34]], 62, "1", 60, 47, "span", 62],
-                    60,
-                    47,
-                    "li",
-                    62
-                  ],
-                  [
-                    60,
-                    "li",
-                    [[32, "class", 61, 34, "", 34]],
-                    62,
-                    [60, "span", [[32, "class", 61, 34, "", 34]], 62, "2", 60, 47, "span", 62],
-                    60,
-                    47,
-                    "li",
-                    62
-                  ],
-                  [
-                    60,
-                    "li",
-                    [[32, "class", 61, 34, "", 34]],
-                    62,
-                    [
-                      60,
-                      "span",
-                      [[32, "class", 61, 34, "", 34]],
-                      62,
-                      "&gt;&gt;",
-                      60,
-                      47,
-                      "span",
-                      62
-                    ],
-                    60,
-                    47,
-                    "li",
-                    62
-                  ]
-                ],
-                60,
-                47,
-                "ul",
-                62
-              ]} =
-               HTML.pagination_links(
-                 build_conn(),
-                 %Page{
-                   entries: [],
-                   page_number: 1,
-                   page_size: 10,
-                   total_entries: 20,
-                   total_pages: 2
-                 },
-                 view_style: :foundation
-               )
+      assert build_conn()
+             |> HTML.pagination_links(
+               %Page{
+                 entries: [],
+                 page_number: 1,
+                 page_size: 10,
+                 total_entries: 20,
+                 total_pages: 2
+               },
+               view_style: :foundation
+             )
+             |> Phoenix.HTML.safe_to_string() ==
+               "<ul class=\"pagination\" role=\"pagination\"><li class=\"current\"><span class=\"\">1</span></li><li class=\"\"><span class=\"\">2</span></li><li class=\"\"><span class=\"\">&gt;&gt;</span></li></ul>"
     end
 
     test "renders Foundation for Sites 6.x styling with ellipsis" do
-      assert {:safe,
-              [
-                60,
-                "ul",
-                [[32, "class", 61, 34, "pagination", 34], [32, "role", 61, 34, "pagination", 34]],
-                62,
-                [
-                  [
-                    60,
-                    "li",
-                    [[32, "class", 61, 34, "", 34]],
-                    62,
-                    [
-                      60,
-                      "span",
-                      [[32, "class", 61, 34, "", 34]],
-                      62,
-                      "&lt;&lt;",
-                      60,
-                      47,
-                      "span",
-                      62
-                    ],
-                    60,
-                    47,
-                    "li",
-                    62
-                  ],
-                  [
-                    60,
-                    "li",
-                    [[32, "class", 61, 34, "", 34]],
-                    62,
-                    [60, "span", [[32, "class", 61, 34, "", 34]], 62, "1", 60, 47, "span", 62],
-                    60,
-                    47,
-                    "li",
-                    62
-                  ],
-                  [
-                    60,
-                    "li",
-                    [[32, "class", 61, 34, "", 34]],
-                    62,
-                    [60, "span", [[32, "class", 61, 34, "", 34]], 62, "2", 60, 47, "span", 62],
-                    60,
-                    47,
-                    "li",
-                    62
-                  ],
-                  [
-                    60,
-                    "li",
-                    [[32, "class", 61, 34, "current", 34]],
-                    62,
-                    [60, "span", [[32, "class", 61, 34, "", 34]], 62, "3", 60, 47, "span", 62],
-                    60,
-                    47,
-                    "li",
-                    62
-                  ],
-                  [
-                    60,
-                    "li",
-                    [[32, "class", 61, 34, "", 34]],
-                    62,
-                    [60, "span", [[32, "class", 61, 34, "", 34]], 62, "4", 60, 47, "span", 62],
-                    60,
-                    47,
-                    "li",
-                    62
-                  ],
-                  [
-                    60,
-                    "li",
-                    [[32, "class", 61, 34, "", 34]],
-                    62,
-                    [60, "span", [[32, "class", 61, 34, "", 34]], 62, "5", 60, 47, "span", 62],
-                    60,
-                    47,
-                    "li",
-                    62
-                  ],
-                  [
-                    60,
-                    "li",
-                    [[32, "class", 61, 34, "", 34]],
-                    62,
-                    [60, "span", [[32, "class", 61, 34, "", 34]], 62, "6", 60, 47, "span", 62],
-                    60,
-                    47,
-                    "li",
-                    62
-                  ],
-                  [
-                    60,
-                    "li",
-                    [[32, "class", 61, 34, "", 34]],
-                    62,
-                    [60, "span", [[32, "class", 61, 34, "", 34]], 62, "7", 60, 47, "span", 62],
-                    60,
-                    47,
-                    "li",
-                    62
-                  ],
-                  [
-                    60,
-                    "li",
-                    [[32, "class", 61, 34, "", 34]],
-                    62,
-                    [60, "span", [[32, "class", 61, 34, "", 34]], 62, "8", 60, 47, "span", 62],
-                    60,
-                    47,
-                    "li",
-                    62
-                  ],
-                  [
-                    60,
-                    "li",
-                    [[32, "class", 61, 34, "ellipsis", 34]],
-                    62,
-                    [60, "span", [[32, "class", 61, 34, "", 34]], 62, "", 60, 47, "span", 62],
-                    60,
-                    47,
-                    "li",
-                    62
-                  ],
-                  [
-                    60,
-                    "li",
-                    [[32, "class", 61, 34, "", 34]],
-                    62,
-                    [60, "span", [[32, "class", 61, 34, "", 34]], 62, "10", 60, 47, "span", 62],
-                    60,
-                    47,
-                    "li",
-                    62
-                  ],
-                  [
-                    60,
-                    "li",
-                    [[32, "class", 61, 34, "", 34]],
-                    62,
-                    [
-                      60,
-                      "span",
-                      [[32, "class", 61, 34, "", 34]],
-                      62,
-                      "&gt;&gt;",
-                      60,
-                      47,
-                      "span",
-                      62
-                    ],
-                    60,
-                    47,
-                    "li",
-                    62
-                  ]
-                ],
-                60,
-                47,
-                "ul",
-                62
-              ]} ==
-               HTML.pagination_links(
-                 build_conn(),
-                 %Page{
-                   entries: [],
-                   page_number: 3,
-                   page_size: 10,
-                   total_entries: 100,
-                   total_pages: 10
-                 },
-                 ellipsis: true,
-                 view_style: :foundation
-               )
+      assert build_conn()
+             |> HTML.pagination_links(
+               %Page{
+                 entries: [],
+                 page_number: 3,
+                 page_size: 10,
+                 total_entries: 100,
+                 total_pages: 10
+               },
+               ellipsis: true,
+               view_style: :foundation
+             )
+             |> Phoenix.HTML.safe_to_string() ==
+               "<ul class=\"pagination\" role=\"pagination\"><li class=\"\"><span class=\"\">&lt;&lt;</span></li><li class=\"\"><span class=\"\">1</span></li><li class=\"\"><span class=\"\">2</span></li><li class=\"current\"><span class=\"\">3</span></li><li class=\"\"><span class=\"\">4</span></li><li class=\"\"><span class=\"\">5</span></li><li class=\"\"><span class=\"\">6</span></li><li class=\"\"><span class=\"\">7</span></li><li class=\"\"><span class=\"\">8</span></li><li class=\"ellipsis\"><span class=\"\"></span></li><li class=\"\"><span class=\"\">10</span></li><li class=\"\"><span class=\"\">&gt;&gt;</span></li></ul>"
     end
 
     test "renders bootstrap v4 styling" do
-      assert {:safe,
-              [
-                60,
-                "nav",
-                [[32, "aria-label", 61, 34, "Page navigation", 34]],
-                62,
-                [
-                  60,
-                  "ul",
-                  [[32, "class", 61, 34, "pagination", 34]],
-                  62,
-                  [
-                    [
-                      60,
-                      "li",
-                      [[32, "class", 61, 34, "active page-item", 34]],
-                      62,
-                      [
-                        60,
-                        "a",
-                        [[32, "class", 61, 34, "page-link", 34]],
-                        62,
-                        "1",
-                        60,
-                        47,
-                        "a",
-                        62
-                      ],
-                      60,
-                      47,
-                      "li",
-                      62
-                    ]
-                  ],
-                  60,
-                  47,
-                  "ul",
-                  62
-                ],
-                60,
-                47,
-                "nav",
-                62
-              ]} =
-               HTML.pagination_links(
-                 build_conn(),
-                 %Page{
-                   entries: [],
-                   page_number: 1,
-                   page_size: 10,
-                   total_entries: 0,
-                   total_pages: 0
-                 },
-                 view_style: :bootstrap_v4
-               )
+      assert build_conn()
+             |> HTML.pagination_links(
+               %Page{
+                 entries: [],
+                 page_number: 1,
+                 page_size: 10,
+                 total_entries: 0,
+                 total_pages: 0
+               },
+               view_style: :bootstrap_v4
+             )
+             |> Phoenix.HTML.safe_to_string() ==
+               "<nav aria-label=\"Page navigation\"><ul class=\"pagination\"><li class=\"active page-item\"><a class=\"page-link\">1</a></li></ul></nav>"
     end
 
     test "renders materialize css styling" do
-      assert {:safe,
-              [
-                60,
-                "ul",
-                [[32, "class", 61, 34, "pagination", 34]],
-                62,
-                [
-                  [
-                    60,
-                    "li",
-                    [[32, "class", 61, 34, "active", 34]],
-                    62,
-                    [60, "a", [[32, "class", 61, 34, "", 34]], 62, "1", 60, 47, "a", 62],
-                    60,
-                    47,
-                    "li",
-                    62
-                  ],
-                  [
-                    60,
-                    "li",
-                    [[32, "class", 61, 34, "waves-effect", 34]],
-                    62,
-                    [60, "a", [[32, "class", 61, 34, "", 34]], 62, "2", 60, 47, "a", 62],
-                    60,
-                    47,
-                    "li",
-                    62
-                  ],
-                  [
-                    60,
-                    "li",
-                    [[32, "class", 61, 34, "waves-effect", 34]],
-                    62,
-                    [60, "a", [[32, "class", 61, 34, "", 34]], 62, "&gt;&gt;", 60, 47, "a", 62],
-                    60,
-                    47,
-                    "li",
-                    62
-                  ]
-                ],
-                60,
-                47,
-                "ul",
-                62
-              ]} =
-               HTML.pagination_links(
-                 build_conn(),
-                 %Page{
-                   entries: [],
-                   page_number: 1,
-                   page_size: 10,
-                   total_entries: 2,
-                   total_pages: 2
-                 },
-                 view_style: :materialize
-               )
+      assert build_conn()
+             |> HTML.pagination_links(
+               %Page{
+                 entries: [],
+                 page_number: 1,
+                 page_size: 10,
+                 total_entries: 2,
+                 total_pages: 2
+               },
+               view_style: :materialize
+             )
+             |> Phoenix.HTML.safe_to_string() ==
+               "<ul class=\"pagination\"><li class=\"active\"><a class=\"\">1</a></li><li class=\"waves-effect\"><a class=\"\">2</a></li><li class=\"waves-effect\"><a class=\"\">&gt;&gt;</a></li></ul>"
     end
 
     test "renders bulma css styling" do
-      assert {:safe,
-              [
-                60,
-                "nav",
-                [[32, "class", 61, 34, "pagination is-centered", 34]],
-                62,
-                [
-                  60,
-                  "ul",
-                  [[32, "class", 61, 34, "pagination-list", 34]],
-                  62,
-                  [
-                    [
-                      60,
-                      "li",
-                      [[32, "class", 61, 34, "", 34]],
-                      62,
-                      [
-                        60,
-                        "a",
-                        [[32, "class", 61, 34, "pagination-link is-current", 34]],
-                        62,
-                        "1",
-                        60,
-                        47,
-                        "a",
-                        62
-                      ],
-                      60,
-                      47,
-                      "li",
-                      62
-                    ],
-                    [
-                      60,
-                      "li",
-                      [[32, "class", 61, 34, "", 34]],
-                      62,
-                      [
-                        60,
-                        "a",
-                        [[32, "class", 61, 34, "pagination-link", 34]],
-                        62,
-                        "2",
-                        60,
-                        47,
-                        "a",
-                        62
-                      ],
-                      60,
-                      47,
-                      "li",
-                      62
-                    ],
-                    [
-                      60,
-                      "li",
-                      [[32, "class", 61, 34, "", 34]],
-                      62,
-                      [
-                        60,
-                        "a",
-                        [[32, "class", 61, 34, "pagination-link", 34]],
-                        62,
-                        "&gt;&gt;",
-                        60,
-                        47,
-                        "a",
-                        62
-                      ],
-                      60,
-                      47,
-                      "li",
-                      62
-                    ]
-                  ],
-                  60,
-                  47,
-                  "ul",
-                  62
-                ],
-                60,
-                47,
-                "nav",
-                62
-              ]} =
-               HTML.pagination_links(
-                 build_conn(),
-                 %Page{
-                   entries: [],
-                   page_number: 1,
-                   page_size: 10,
-                   total_entries: 2,
-                   total_pages: 2
-                 },
-                 view_style: :bulma
-               )
+      assert build_conn()
+             |> HTML.pagination_links(
+               %Page{
+                 entries: [],
+                 page_number: 1,
+                 page_size: 10,
+                 total_entries: 2,
+                 total_pages: 2
+               },
+               view_style: :bulma
+             )
+             |> Phoenix.HTML.safe_to_string() ==
+               "<nav class=\"pagination is-centered\"><ul class=\"pagination-list\"><li class=\"\"><a class=\"pagination-link is-current\">1</a></li><li class=\"\"><a class=\"pagination-link\">2</a></li><li class=\"\"><a class=\"pagination-link\">&gt;&gt;</a></li></ul></nav>"
     end
   end
 end
